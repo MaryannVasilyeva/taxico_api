@@ -25,7 +25,7 @@ exports.index = function( req, res, next ){
 };
 //create a new schedule with vehicle id and driver name
 exports.create = function( req, res, next ){
-    
+
     var newSchedule = Schedule.build( {
         driver_name: req.body.schedule.driver_name,
         vehicle_plate_number: req.body.schedule.vehicle_plate_number,
@@ -38,6 +38,24 @@ exports.create = function( req, res, next ){
             return next();
         } else{
             res.send( 201, { schedule: newSchedule } );
+            return next();
+        }
+    } )
+};
+
+// view an individual schedule
+exports.view = function( err, req, res ){
+    Schedule.find( {
+        where: {
+            id: req.params.schedule_id
+        }
+    } ).done( function( err, schedule ){
+        if( !!err ){
+            console.log( 'there is an error viewing a vehicle' )
+        } else if( !schedule ){
+            res.send( 404, { err: [ 'Vehicle not found' ] } )
+        } else{
+            res.send( 200, { schedule: schedule } );
             return next();
         }
     } )

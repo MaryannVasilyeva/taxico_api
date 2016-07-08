@@ -43,16 +43,12 @@ exports.create = function( req, res, next ){
 
 };
 
-// view an individual driver, still figuring out if i need it or not
+// view an individual driver
 exports.view = function( req, res, next ){
-    // req.assert( 'driver_id', 'isString' );
 
     Driver.find( {
         where: {
             id: req.params.driver_id
-        },
-        include: {
-            model: Schedule
         }
     } ).done( function( err, driver ){
         if( !!err ){
@@ -66,8 +62,9 @@ exports.view = function( req, res, next ){
     } )
 };
 
-// allows you to update the schedule within the driver
+// allows you to update the driver
 exports.update = function( req, res, next ){
+    
     Driver.find( {
         where: {
             id: req.params.driver_id
