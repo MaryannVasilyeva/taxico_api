@@ -1,0 +1,14 @@
+{
+  "api": {
+    "name": "My Taxi Company API",
+    "version": "1.0.0",
+    "host": "",
+    "port": 4000
+  },
+  "database": {
+    "host": "127.0.0.1",
+    "db": "taxico_api",
+    "user": "root",
+    "pass": ""
+  }
+}
