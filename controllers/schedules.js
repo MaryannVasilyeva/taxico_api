@@ -22,13 +22,14 @@ exports.index = function( req, res, next ){
                 return next();
             }
         } )
+
 };
 //create a new schedule with vehicle id and driver name
 exports.create = function( req, res, next ){
-
+    console.log( 'req' + JSON.stringify( req.body ) );
     var newSchedule = Schedule.build( {
-        driver_name: req.body.schedule.driver_name,
-        vehicle_plate_number: req.body.schedule.vehicle_plate_number,
+        driver_id: req.body.schedule.driver_id,
+        vehicle_id: req.body.schedule.vehicle_id,
         start_day: req.body.schedule.start_day,
         end_day: req.body.schedule.end_day
     } );

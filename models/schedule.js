@@ -28,10 +28,30 @@ module.exports = function( sequelize, DataTypes ){
                 type: DataTypes.UUID,
                 allowNull: true
             },
+            vehicle_id: {
+                type: DataTypes.UUID,
+                allowNull: true
+            },
             driver_name: {
                 type: DataTypes.STRING,
                 allowNull: false
             }
+        },
+        {
+            tableName: 'schedules',
+            associate: function( models ){
+                Schedule.hasMany( models.Vehicle );
+                Schedule.hasMany( models.Driver );
+            }
         } );
     return Schedule;
 };
+
+
+// tableName: 'schedules',
+//     associate
+// :
+// function( models ){
+//     Schedule.hasMany( models.Vehicle );
+//     Schedule.hasMany( models.Driver );
+// }

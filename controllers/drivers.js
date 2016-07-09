@@ -64,7 +64,7 @@ exports.view = function( req, res, next ){
 
 // allows you to update the driver
 exports.update = function( req, res, next ){
-    
+
     Driver.find( {
         where: {
             id: req.params.driver_id
@@ -120,6 +120,34 @@ exports.delete = function( req, res, next ){
                         return next();
                     }
                 } )
+        }
+    } )
+};
+// allows you to find view the schedule associated with the driver you selected
+exports.viewSchedule = function( req, res, next ){
+    console.log( 'this is to view the Schedules that belong to this driver' );
+    Driver.find( {
+        where: {
+            id: req.params.driver_id
+        }
+    } ).done( function( err, driver_id ){
+        if( !!err ){
+            console.log( 'error finding the driver ' + JSON.stringify( err ) )
+        } else{
+            console.log( 'this is the driver id ' + driver_id );
+            Schedule.find( {
+                where: {
+                    driver_id: driver_id
+                }
+            } ).done( function( err, res ){
+                if( !!err ){
+                    console.log( 'err associating the driver with a schedule' + JSON.stringify( err ) );
+                    return next();
+                } else{
+                    res.send( 200, { driver_id: driver_id } );
+                    return next();
+                }
+            } )
         }
     } )
 };

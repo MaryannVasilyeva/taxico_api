@@ -6,6 +6,7 @@ module.exports = function( server ){
     server.get( '/drivers/:driver_id', drivers.view );
     server.put( '/drivers/:driver_id', drivers.update );
     server.del( '/drivers/:driver_id', drivers.delete );
+    server.get( '/drivers/:driver_id/schedules', drivers.viewSchedule );
 
     var vehicles = require( '../controllers/vehicles' );
     server.get( '/vehicles', vehicles.index );
