@@ -39,6 +39,7 @@ exports.create = function( req, res, next ){
 
 };
 
+
 exports.view = function( req, res, next ){
     Vehicle.find( {
         where: {
@@ -50,11 +51,42 @@ exports.view = function( req, res, next ){
         } else if( !vehicle ){
             res.send( 404, { err: [ 'Vehicle not found' ] } )
         } else{
+            Schedule.findAll( {
+                where: {
+                    driver_id: req.params.vehicle_id
+                }
+            } ).done( function( err, schedules ){
+                if( !!err ){
+                    console.log( 'err with schedules ' + JSON.stringify( err ) );
+                } else if( !schedules ){
+                    console.log( 'no schedules ' )
+                } else{
+                    // console.log( 'schedules ' + JSON.stringify( schedules ) );
+                    res.send( 200, { schedules: schedules } );
+                    return next();
+                }
+            } );
             res.send( 200, { vehicle: vehicle } );
             return next();
         }
     } )
 };
+// exports.view = function( req, res, next ){
+//     Vehicle.find( {
+//         where: {
+//             id: req.params.vehicle_id
+//         }
+//     } ).done( function( err, vehicle ){
+//         if( !!err ){
+//             console.log( 'there is an error viewing a vehicle' )
+//         } else if( !vehicle ){
+//             res.send( 404, { err: [ 'Vehicle not found' ] } )
+//         } else{
+//             res.send( 200, { vehicle: vehicle } );
+//             return next();
+//         }
+//     } )
+// };
 // allows you to update the driver
 exports.update = function( req, res, next ){
 

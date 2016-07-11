@@ -37,13 +37,7 @@ module.exports = function( sequelize, DataTypes ){
                     ]
                 },
                 comment: "0: Open, 1: Deleted"
-            } 
-            // tableName: 'drivers',
-            // associate: function( models ){
-            //     Driver.belongsTo( models.Schedule );
-            // }
+            }
         } );
     return Driver;
 };
-
-

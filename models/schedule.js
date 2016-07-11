@@ -6,35 +6,46 @@ module.exports = function( sequelize, DataTypes ){
                 defaultValue: DataTypes.UUIDV1,
                 primaryKey: true
             },
+            type: {
+                type: DataTypes.INTEGER( 2 ).UNSIGNED,
+                allowNull: false,
+                defaultValue: 0,
+                validate: {
+                    isIn: [
+                        [ 0, 1, 2, 3, 4, 5, 6 ]
+                    ]
+                },
+                comment: "0: Sunday, 1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday"
+            },
             start_day: {
                 type: DataTypes.DATE,
-                allowNull: false,
+                allowNull: true,
                 validate: {
                     notEmpty: true
                 }
             },
             end_day: {
                 type: DataTypes.DATE,
-                allowNull: false,
+                allowNull: true,
                 validate: {
                     notEmpty: true
                 }
             },
-            vehicle_plate_number: {
+            vehicle_id: {
                 type: DataTypes.STRING,
                 allowNull: false
+            },
+            vehicle_plate_number: {
+                type: DataTypes.STRING,
+                allowNull: true
             },
             driver_id: {
                 type: DataTypes.UUID,
-                allowNull: true
-            },
-            vehicle_id: {
-                type: DataTypes.UUID,
-                allowNull: true
+                allowNull: false
             },
             driver_name: {
                 type: DataTypes.STRING,
-                allowNull: false
+                allowNull: true
             }
         },
         {
@@ -46,12 +57,3 @@ module.exports = function( sequelize, DataTypes ){
         } );
     return Schedule;
 };
-
-
-// tableName: 'schedules',
-//     associate
-// :
-// function( models ){
-//     Schedule.hasMany( models.Vehicle );
-//     Schedule.hasMany( models.Driver );
-// }

@@ -42,10 +42,7 @@ exports.create = function( req, res, next ){
     } )
 
 };
-
-// view an individual driver
 exports.view = function( req, res, next ){
-
     Driver.find( {
         where: {
             id: req.params.driver_id
@@ -56,11 +53,44 @@ exports.view = function( req, res, next ){
         } else if( !driver ){
             res.send( 404, { err: [ 'Driver not found' ] } )
         } else{
+            Schedule.findAll( {
+                where: {
+                    driver_id: req.params.driver_id
+                }
+            } ).done( function( err, schedules ){
+                if( !!err ){
+                    console.log( 'err with schedules ' + JSON.stringify( err ) );
+                } else if( !schedules ){
+                    console.log( 'no schedules ' )
+                } else{
+                    res.send( 200, { schedules: schedules } );
+                    return next();
+                }
+            } );
             res.send( 200, { driver: driver } );
             return next();
         }
     } )
 };
+
+// view an individual driver
+// exports.view = function( req, res, next ){
+//     console.log( 'when does it hit here?' + req.params.driver_id );
+//     Driver.find( {
+//         where: {
+//             id: req.params.driver_id
+//         }
+//     } ).done( function( err, driver ){
+//         if( !!err ){
+//             console.log( 'there is an error viewing a driver' )
+//         } else if( !driver ){
+//             res.send( 404, { err: [ 'Driver not found' ] } )
+//         } else {
+//             res.send( 200, { driver: driver } );
+//             return next();
+//         }
+//     } )
+// };
 
 // allows you to update the driver
 exports.update = function( req, res, next ){
@@ -85,7 +115,7 @@ exports.update = function( req, res, next ){
             } );
             driver.save().done( function( err ){
                 if( !!err ){
-                    console.log( 'trying to save updated driver ' + JSON.stringify( err ) )
+                    console.log( 'trying to save updated driver ' + JSON.stringify( err ) );
                     return next();
                 } else{
                     res.send( 200, { driver: driver } );
@@ -123,32 +153,5 @@ exports.delete = function( req, res, next ){
         }
     } )
 };
-// allows you to find view the schedule associated with the driver you selected
-exports.viewSchedule = function( req, res, next ){
-    console.log( 'this is to view the Schedules that belong to this driver' );
-    Driver.find( {
-        where: {
-            id: req.params.driver_id
-        }
-    } ).done( function( err, driver_id ){
-        if( !!err ){
-            console.log( 'error finding the driver ' + JSON.stringify( err ) )
-        } else{
-            console.log( 'this is the driver id ' + driver_id );
-            Schedule.find( {
-                where: {
-                    driver_id: driver_id
-                }
-            } ).done( function( err, res ){
-                if( !!err ){
-                    console.log( 'err associating the driver with a schedule' + JSON.stringify( err ) );
-                    return next();
-                } else{
-                    res.send( 200, { driver_id: driver_id } );
-                    return next();
-                }
-            } )
-        }
-    } )
-};
+
 

@@ -21,10 +21,6 @@ module.exports = function( sequelize, DataTypes ){
                 },
                 comment: "0: Open, 1: Deleted"
             }
-            // tableName: 'vehicles',
-            // associate: function( models ){
-            //     Vehicle.belongsTo( models.Schedule );
-            // }
         } );
     return Vehicle;
 };
