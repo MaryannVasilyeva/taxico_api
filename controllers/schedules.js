@@ -8,8 +8,14 @@ var Vehicle = db.Vehicle;
 // supposed to index all the schedules made
 exports.index = function( req, res, next ){
     var query = {
-        where: {}
+        where: []
     };
+    if( req.params.vehicle_id ){
+        query.where.push( { vehicle_id: req.params.vehicle_id } );
+    }
+    if( req.params.driver_id ){
+        query.where.push( { driver_id: req.params.driver_id } );
+    }
     Schedule.findAll( query )
         .done( function( err, schedules ){
             if( !!err ){
@@ -38,7 +44,6 @@ exports.create = function( req, res, next ){
             console.log( 'there is an error creating schedule ' + JSON.stringify( err ) );
             return next();
         } else{
-            console.log( 'schedule ' + JSON.stringify( newSchedule ) );
             res.send( 201, { schedule: newSchedule } );
             return next();
         }
@@ -91,20 +96,3 @@ exports.view = function( req, res, next ){
         }
     } )
 };
-// exports.view = function( req, res, next ){
-//    
-//     Schedule.find( {
-//         where: {
-//             id: req.params.schedule_id
-//         }
-//     } ).done( function( err, schedule ){
-//         if( !!err ){
-//             console.log( 'there is an error viewing a vehicle' )
-//         } else if( !schedule ){
-//             res.send( 404, { err: [ 'Schedule not found' ] } )
-//         } else{
-//             res.send( 200, { schedule: schedule } );
-//             return next();
-//         }
-//     } )
-// };

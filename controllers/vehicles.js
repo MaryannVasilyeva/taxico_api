@@ -39,7 +39,6 @@ exports.create = function( req, res, next ){
 
 };
 
-
 exports.view = function( req, res, next ){
     Vehicle.find( {
         where: {
@@ -47,30 +46,26 @@ exports.view = function( req, res, next ){
         }
     } ).done( function( err, vehicle ){
         if( !!err ){
-            console.log( 'there is an error viewing a vehicle' )
-        } else if( !vehicle ){
-            res.send( 404, { err: [ 'Vehicle not found' ] } )
+            console.log( JSON.stringify( err ) );
+            return next();
         } else{
             Schedule.findAll( {
-                where: {
-                    driver_id: req.params.vehicle_id
-                }
+                where: [
+                    { vehicle_id: vehicle.id }
+                ]
             } ).done( function( err, schedules ){
                 if( !!err ){
-                    console.log( 'err with schedules ' + JSON.stringify( err ) );
+                    console.log( JSON.stringify( err ) )
                 } else if( !schedules ){
-                    console.log( 'no schedules ' )
+                    console.log( 'no schedules' )
                 } else{
-                    // console.log( 'schedules ' + JSON.stringify( schedules ) );
-                    res.send( 200, { schedules: schedules } );
+                    res.send( 200, { schedules: schedules, vehicle: vehicle } );
                     return next();
                 }
-            } );
-            res.send( 200, { vehicle: vehicle } );
-            return next();
+            } )
         }
     } )
-};
+}
 // exports.view = function( req, res, next ){
 //     Vehicle.find( {
 //         where: {
@@ -81,12 +76,28 @@ exports.view = function( req, res, next ){
 //             console.log( 'there is an error viewing a vehicle' )
 //         } else if( !vehicle ){
 //             res.send( 404, { err: [ 'Vehicle not found' ] } )
-//         } else{
+//         } else {
+//             Schedule.findAll( {
+//                 where: {
+//                     driver_id: req.params.vehicle_id
+//                 }
+//             } ).done( function( err, schedules ){
+//                 if( !!err ){
+//                     console.log( 'err with schedules ' + JSON.stringify( err ) );
+//                 } else if( !schedules ){
+//                     console.log( 'no schedules ' )
+//                 } else{
+//                     console.log( 'schedules ' + JSON.stringify( schedules ) );
+//                     res.send( 200, { schedules: schedules } );
+//                     return next();
+//                 }
+//             } );
 //             res.send( 200, { vehicle: vehicle } );
 //             return next();
 //         }
 //     } )
 // };
+
 // allows you to update the driver
 exports.update = function( req, res, next ){
 

@@ -55,7 +55,7 @@ exports.view = function( req, res, next ){
         } else{
             Schedule.findAll( {
                 where: {
-                    driver_id: req.params.driver_id
+                    driver_id: driver.driver_id
                 }
             } ).done( function( err, schedules ){
                 if( !!err ){
@@ -63,10 +63,12 @@ exports.view = function( req, res, next ){
                 } else if( !schedules ){
                     console.log( 'no schedules ' )
                 } else{
+                    console.log( schedules );
                     res.send( 200, { schedules: schedules } );
                     return next();
                 }
             } );
+            console.log( JSON.stringify( driver ) );
             res.send( 200, { driver: driver } );
             return next();
         }
@@ -85,7 +87,8 @@ exports.view = function( req, res, next ){
 //             console.log( 'there is an error viewing a driver' )
 //         } else if( !driver ){
 //             res.send( 404, { err: [ 'Driver not found' ] } )
-//         } else {
+//         } else{
+//             console.log( JSON.stringify( driver ) );
 //             res.send( 200, { driver: driver } );
 //             return next();
 //         }
@@ -128,7 +131,6 @@ exports.update = function( req, res, next ){
 
 // allows you to delete the driver 
 exports.delete = function( req, res, next ){
-    console.log( req.params );
     Driver.find( {
         where: {
             id: req.params.driver_id
@@ -145,7 +147,6 @@ exports.delete = function( req, res, next ){
                     if( !!err ){
                         console.log( 'second error with deleting vehicle ' + err )
                     } else{
-                        console.log( 'deleted' );
                         res.send( 200, { driver: result } );
                         return next();
                     }
